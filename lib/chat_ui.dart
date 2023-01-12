@@ -13,7 +13,7 @@ class ChatScreenUI extends StatefulWidget {
 }
 
 class ChatScreenUIState extends State<ChatScreenUI> {
-  TextEditingController _chatController = TextEditingController();
+  final TextEditingController _chatController = TextEditingController();
   List<ChatMessage> messageList = [];
   ChatGPT? chatGPT;
   StreamSubscription? _streamSubscription;
@@ -32,8 +32,8 @@ class ChatScreenUIState extends State<ChatScreenUI> {
   }
 
   void _sendMessage() {
-    ChatMessage chatMessage =
-        ChatMessage(text: _chatController.text.toString(), sender: "user");
+    ChatMessage chatMessage = ChatMessage(
+        text: _chatController.text.trim().toString(), sender: "user");
 
     setState(() {
       isTyping = true;
@@ -45,19 +45,29 @@ class ChatScreenUIState extends State<ChatScreenUI> {
     final request = CompleteReq(
         prompt: chatMessage.text, model: kTranslateModelV3, max_tokens: 200);
     _streamSubscription = chatGPT!
-        .builder("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")
+        .builder("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")
         .onCompleteStream(request: request)
         .listen((event) {
-      print(event!.choices);
-      ChatMessage botMessage = ChatMessage(
-        text: event.choices[0].text,
-        sender: "bot",
-      );
+      if (event == null) {
+        ChatMessage botMessage = const ChatMessage(
+          text: "Something went wrongs",
+          sender: "bot",
+        );
+        setState(() {
+          isTyping = false;
+          messageList.insert(0, botMessage);
+        });
+      } else {
+        ChatMessage botMessage = ChatMessage(
+          text: event!.choices[0].text,
+          sender: "bot",
+        );
 
-      setState(() {
-        isTyping = false;
-        messageList.insert(0, botMessage);
-      });
+        setState(() {
+          isTyping = false;
+          messageList.insert(0, botMessage);
+        });
+      }
     });
   }
 
@@ -104,7 +114,11 @@ class ChatScreenUIState extends State<ChatScreenUI> {
         )),
         IconButton(
             onPressed: () {
-              _sendMessage();
+              if (_chatController.text.isEmpty) {
+                return;
+              } else {
+                _sendMessage();
+              }
             },
             icon: Icon(Icons.send))
       ],

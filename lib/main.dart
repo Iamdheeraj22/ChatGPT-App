@@ -1,7 +1,20 @@
+import 'dart:io';
+
 import 'package:chat_gpt_app/chat_ui.dart';
 import 'package:flutter/material.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -13,12 +26,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true
-      ),
-      home:  ChatScreenUI(),
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+      home: ChatScreenUI(),
     );
   }
 }
-
