@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:chat_gpt_app/SuggestionList.dart';
 import 'package:chat_gpt_app/chat_message.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
+
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ChatScreenUI extends StatefulWidget {
   const ChatScreenUI({super.key});
@@ -17,15 +19,21 @@ class ChatScreenUIState extends State<ChatScreenUI> {
   final TextEditingController _chatController = TextEditingController();
   List<ChatMessage> messageList = [];
   List<Suggestion> _suggestionList = [];
-  ChatGPT? chatGPT;
+  late ChatGPT? chatGPT;
   StreamSubscription? _streamSubscription;
   bool isTyping = false;
 
   @override
   void initState() {
-    _suggestionList = GetSuggestionList();
-    chatGPT = ChatGPT.instance;
+    // chatGPT = ChatGPT.instance.builder(
+    //     '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',
+    //     baseOption: HttpSetup(receiveTimeout: 60000));
+    chatGPT = ChatGPT.instance.builder(
+        'https://api.openai.com/v1/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');
     super.initState();
+    _suggestionList = GetSuggestionList();
+    // chatGPT = ChatGPT.instance
+    //     .builder("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");
   }
 
   @override
@@ -48,8 +56,8 @@ class ChatScreenUIState extends State<ChatScreenUI> {
     final request = CompleteReq(
         prompt: chatMessage.text, model: kTranslateModelV3, max_tokens: 200);
     _streamSubscription = chatGPT!
-        .builder("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")
         .onCompleteStream(request: request)
+        .asBroadcastStream()
         .listen((event) {
       if (event == null) {
         ChatMessage botMessage = const ChatMessage(
@@ -87,8 +95,8 @@ class ChatScreenUIState extends State<ChatScreenUI> {
     final request = CompleteReq(
         prompt: chatMessage.text, model: kTranslateModelV3, max_tokens: 200);
     _streamSubscription = chatGPT!
-        .builder("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")
         .onCompleteStream(request: request)
+        .asBroadcastStream()
         .listen((event) {
       if (event == null) {
         ChatMessage botMessage = const ChatMessage(
@@ -132,38 +140,38 @@ class ChatScreenUIState extends State<ChatScreenUI> {
                       return messageList[index];
                     })),
             if (isTyping) Text("bot typing........"),
-            if (isTyping == false)
-              Container(
-                height: 30,
-                child: ListView.builder(
-                  itemCount: _suggestionList.length,
-                  shrinkWrap: true,
-                  reverse: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (ctx, index) {
-                    return InkWell(
-                      onTap: () {
-                        _sendSuggestionMessage(
-                            title: _suggestionList[index].title.toString());
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 30,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Center(
-                          child: Text(
-                            _suggestionList[index].title,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+            // if (isTyping == false)
+            //   Container(
+            //     height: 30,
+            //     child: ListView.builder(
+            //       itemCount: _suggestionList.length,
+            //       shrinkWrap: true,
+            //       reverse: true,
+            //       scrollDirection: Axis.horizontal,
+            //       itemBuilder: (ctx, index) {
+            //         return InkWell(
+            //           onTap: () {
+            //             _sendSuggestionMessage(
+            //                 title: _suggestionList[index].title.toString());
+            //           },
+            //           child: Container(
+            //             margin: EdgeInsets.symmetric(horizontal: 5),
+            //             padding: EdgeInsets.symmetric(horizontal: 10),
+            //             height: 30,
+            //             decoration: BoxDecoration(
+            //                 border: Border.all(color: Colors.black),
+            //                 borderRadius: BorderRadius.circular(5)),
+            //             child: Center(
+            //               child: Text(
+            //                 _suggestionList[index].title,
+            //                 style: TextStyle(color: Colors.black),
+            //               ),
+            //             ),
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   ),
             Container(
               decoration: BoxDecoration(color: context.cardColor),
               child: customTextfield(),
