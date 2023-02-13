@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:chat_gpt_app/chat_ui.dart';
+import 'package:chat_gpt_app/with_http/chat_screen_ui.dart';
 import 'package:flutter/material.dart';
 
 class MyHttpOverrides extends HttpOverrides {
