@@ -1,3 +1,6 @@
+import 'package:chat_gpt_app/model/ChatModel.dart';
+import 'package:chat_gpt_app/model/chatGPT_response_model.dart';
+import 'package:chat_gpt_app/size_config.dart';
 import 'package:chat_gpt_app/with_http/api_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -15,11 +18,6 @@ class _ChatScreenUIState extends State<ChatScreenUI> {
   @override
   void initState() {
     super.initState();
-    // generateText(widget.prompt).then((text) {
-    //   setState(() {
-    //     _generatedText = text;
-    //   });
-    // });
   }
 
   @override
@@ -34,19 +32,65 @@ class _ChatScreenUIState extends State<ChatScreenUI> {
                 color: Colors.blueAccent,
                 fontWeight: FontWeight.w700),
           )),
-      body: Container(
+      body: SizedBox(
           height: double.infinity,
           width: double.infinity,
-          child: Stack(alignment: Alignment.bottomCenter, children: [
+          child: Stack(children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              child: Text(_generatedText),
+              padding: EdgeInsets.only(bottom: 100.h),
+              child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: _chatList.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 10.h),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 60.h,
+                            width: 60.h,
+                            decoration: BoxDecoration(
+                                color: _chatList[index].type == 1
+                                    ? Colors.redAccent
+                                    : Colors.greenAccent,
+                                borderRadius: BorderRadius.circular(200.h)),
+                            child: Center(
+                              child: Text(
+                                _chatList[index].type == 1 ? 'U' : 'B',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 24,
+                                    color: _chatList[index].type == 1
+                                        ? Colors.white
+                                        : Colors.black),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          Expanded(
+                            child: Text(
+                              _chatList[index]
+                                  .text
+                                  .trim()
+                                  .replaceAll("\n", " "),
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
             ),
             Container(
+              alignment: Alignment.bottomCenter,
               margin: const EdgeInsets.only(bottom: 10),
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width / 1.2,
                     child: Card(
                         child: TextFormField(
@@ -58,9 +102,13 @@ class _ChatScreenUIState extends State<ChatScreenUI> {
                     )),
                   ),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (controller.text.isNotEmpty) {
-                        generateText(controller.text.toString());
+                        setState(() {
+                          _chatList
+                              .add(ChatModel(type: 1, text: controller.text));
+                        });
+                        apiHit(controller.text);
                       } else {}
                     },
                     child: const Card(
@@ -76,4 +124,14 @@ class _ChatScreenUIState extends State<ChatScreenUI> {
           ])),
     );
   }
+
+  void apiHit(text) async {
+    final result = await generateText(text);
+    setState(() {
+      _chatList
+          .add(ChatModel(type: 2, text: result.choices![0].text.toString()));
+    });
+  }
 }
+
+List<ChatModel> _chatList = [];

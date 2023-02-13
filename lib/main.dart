@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat_gpt_app/size_config.dart';
 import 'package:chat_gpt_app/with_http/chat_screen_ui.dart';
 import 'package:flutter/material.dart';
 
@@ -24,10 +25,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-      home: ChatScreenUI(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+        home: ChatScreenUI(),
+        builder: (context, child) {
+          SizeConfig.initialize(
+              context: context,
+              draftWidth: MediaQuery.of(context).size.width,
+              draftHeight: MediaQuery.of(context).size.height);
+          return child!;
+        });
   }
 }

@@ -1,4 +1,4 @@
-class ChatModel {
+class ChatGPTModel {
   String? id;
   String? object;
   int? created;
@@ -6,7 +6,7 @@ class ChatModel {
   List<Choices>? choices;
   Usage? usage;
 
-  ChatModel(
+  ChatGPTModel(
       {this.id,
       this.object,
       this.created,
@@ -14,7 +14,7 @@ class ChatModel {
       this.choices,
       this.usage});
 
-  ChatModel.fromJson(Map<String, dynamic> json) {
+  ChatGPTModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     object = json['object'];
     created = json['created'];
@@ -22,23 +22,23 @@ class ChatModel {
     if (json['choices'] != null) {
       choices = <Choices>[];
       json['choices'].forEach((v) {
-        choices!.add(new Choices.fromJson(v));
+        choices!.add(Choices.fromJson(v));
       });
     }
-    usage = json['usage'] != null ? new Usage.fromJson(json['usage']) : null;
+    usage = json['usage'] != null ? Usage.fromJson(json['usage']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['object'] = this.object;
-    data['created'] = this.created;
-    data['model'] = this.model;
-    if (this.choices != null) {
-      data['choices'] = this.choices!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['object'] = object;
+    data['created'] = created;
+    data['model'] = model;
+    if (choices != null) {
+      data['choices'] = choices!.map((v) => v.toJson()).toList();
     }
-    if (this.usage != null) {
-      data['usage'] = this.usage!.toJson();
+    if (usage != null) {
+      data['usage'] = usage!.toJson();
     }
     return data;
   }
@@ -47,7 +47,7 @@ class ChatModel {
 class Choices {
   String? text;
   int? index;
-  Null? logprobs;
+  dynamic? logprobs;
   String? finishReason;
 
   Choices({this.text, this.index, this.logprobs, this.finishReason});
@@ -60,11 +60,11 @@ class Choices {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['text'] = this.text;
-    data['index'] = this.index;
-    data['logprobs'] = this.logprobs;
-    data['finish_reason'] = this.finishReason;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['text'] = text;
+    data['index'] = index;
+    data['logprobs'] = logprobs;
+    data['finish_reason'] = finishReason;
     return data;
   }
 }
@@ -83,10 +83,10 @@ class Usage {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['prompt_tokens'] = this.promptTokens;
-    data['completion_tokens'] = this.completionTokens;
-    data['total_tokens'] = this.totalTokens;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['prompt_tokens'] = promptTokens;
+    data['completion_tokens'] = completionTokens;
+    data['total_tokens'] = totalTokens;
     return data;
   }
 }
