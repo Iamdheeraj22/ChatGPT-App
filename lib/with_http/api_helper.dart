@@ -4,7 +4,7 @@ import 'package:chat_gpt_app/model/chatGPT_response_model.dart';
 import 'package:http/http.dart' as http;
 
 Future<ChatGPTModel> generateText(String prompt) async {
-  const apiKey = "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";
+  const apiKey = "your apiKey";
   const endpoint = "https://api.openai.com/v1/completions";
 
   final response = await http.post(

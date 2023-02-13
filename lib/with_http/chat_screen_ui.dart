@@ -1,6 +1,8 @@
+import 'package:chat_gpt_app/SuggestionList.dart';
 import 'package:chat_gpt_app/model/ChatModel.dart';
 import 'package:chat_gpt_app/model/chatGPT_response_model.dart';
 import 'package:chat_gpt_app/size_config.dart';
+import 'package:chat_gpt_app/widgets/message_ui.dart';
 import 'package:chat_gpt_app/with_http/api_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -39,85 +41,77 @@ class _ChatScreenUIState extends State<ChatScreenUI> {
             Padding(
               padding: EdgeInsets.only(bottom: 100.h),
               child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
                   padding: EdgeInsets.zero,
                   itemCount: _chatList.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 10.h),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 60.h,
-                            width: 60.h,
-                            decoration: BoxDecoration(
-                                color: _chatList[index].type == 1
-                                    ? Colors.redAccent
-                                    : Colors.greenAccent,
-                                borderRadius: BorderRadius.circular(200.h)),
-                            child: Center(
-                              child: Text(
-                                _chatList[index].type == 1 ? 'U' : 'B',
-                                style: TextStyle(
-                                    fontStyle: FontStyle.normal,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 24,
-                                    color: _chatList[index].type == 1
-                                        ? Colors.white
-                                        : Colors.black),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Expanded(
-                            child: Text(
-                              _chatList[index]
-                                  .text
-                                  .trim()
-                                  .replaceAll("\n", " "),
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                        ],
-                      ),
+                    return MessageUI(
+                      type: _chatList[index].type,
+                      text: _chatList[index].text,
                     );
                   }),
             ),
             Container(
               alignment: Alignment.bottomCenter,
               margin: const EdgeInsets.only(bottom: 10),
-              child: Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 1.2,
-                    child: Card(
-                        child: TextFormField(
-                      controller: controller,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(left: 20),
-                          hintText: 'Write a text'),
-                    )),
+                  Container(
+                    height: 30.h,
+                    margin: EdgeInsets.symmetric(horizontal: 10.w),
+                    child: ListView.builder(
+                        itemCount: GetSuggestionList().length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (sContext, sIndex) {
+                          return Container(
+                            margin: EdgeInsets.only(right: 10.w),
+                            padding: EdgeInsets.symmetric(horizontal: 30.w),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.r),
+                                border: Border.all(color: Colors.grey)),
+                            child: Center(
+                                child: Text(GetSuggestionList()[sIndex].title)),
+                          );
+                        }),
                   ),
-                  InkWell(
-                    onTap: () async {
-                      if (controller.text.isNotEmpty) {
-                        setState(() {
-                          _chatList
-                              .add(ChatModel(type: 1, text: controller.text));
-                        });
-                        apiHit(controller.text);
-                      } else {}
-                    },
-                    child: const Card(
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          child: Icon(Icons.send)),
+                  Container(
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 1.2,
+                          child: Card(
+                              child: TextFormField(
+                            controller: controller,
+                            decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.only(left: 20),
+                                hintText: 'Write a text'),
+                          )),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            if (controller.text.isNotEmpty) {
+                              setState(() {
+                                _chatList.add(
+                                    ChatModel(type: 1, text: controller.text));
+                                controller.text = '';
+                              });
+                              apiHit(controller.text);
+                            } else {}
+                          },
+                          child: const Card(
+                            child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                child: Icon(Icons.send)),
+                          ),
+                        )
+                      ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
