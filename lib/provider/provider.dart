@@ -13,12 +13,21 @@ class ProviderViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void sendMessage(BuildContext context) async {
+  void sendMessage(BuildContext context, {String suggestion = ''}) async {
     setIsShow();
     if (msgTextController.text.isNotEmpty) {
       chatList.add(ChatModel(type: 1, text: msgTextController.text));
       final result = await generateText(msgTextController.text);
       msgTextController.text = '';
+
+      chatList
+          .add(ChatModel(type: 2, text: result.choices![0].text.toString()));
+
+      setIsShow();
+      notifyListeners();
+    } else if (msgTextController.text.isEmpty && suggestion.isNotEmpty) {
+      chatList.add(ChatModel(type: 1, text: suggestion));
+      final result = await generateText(msgTextController.text);
       chatList
           .add(ChatModel(type: 2, text: result.choices![0].text.toString()));
       setIsShow();
@@ -39,11 +48,11 @@ class ProviderViewModel extends ChangeNotifier {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.white,
-        margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
+        // margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
         elevation: 5,
         content: Text(data,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 14.sp,
               fontWeight: FontWeight.bold,
             )),

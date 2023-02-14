@@ -69,16 +69,24 @@ class _ChatScreenUIState extends State<ChatScreenUI> {
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (sContext, sIndex) {
-                                return Container(
-                                  margin: EdgeInsets.only(right: 10.w),
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 30.w),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.r),
-                                      border: Border.all(color: Colors.grey)),
-                                  child: Center(
-                                      child: Text(
-                                          GetSuggestionList()[sIndex].title)),
+                                return InkWell(
+                                  onTap: () {
+                                    v.sendMessage(context,
+                                        suggestion:
+                                            GetSuggestionList()[sIndex].title);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 10.w),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 30.w),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(5.r),
+                                        border: Border.all(color: Colors.grey)),
+                                    child: Center(
+                                        child: Text(
+                                            GetSuggestionList()[sIndex].title)),
+                                  ),
                                 );
                               }),
                         ),

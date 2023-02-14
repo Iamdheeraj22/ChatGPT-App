@@ -14,7 +14,6 @@ class MessageUI extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 10.h, right: 10.w, left: 10.w),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             height: 60.h,
