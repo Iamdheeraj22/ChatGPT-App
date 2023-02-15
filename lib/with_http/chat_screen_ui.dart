@@ -107,7 +107,8 @@ class _ChatScreenUIState extends State<ChatScreenUI> {
                             ),
                             InkWell(
                               onTap: () async {
-                                v.sendMessage(context);
+                                //  v.sendMessage(context);
+                                generateImages('');
                               },
                               child: const Card(
                                 child: Padding(
