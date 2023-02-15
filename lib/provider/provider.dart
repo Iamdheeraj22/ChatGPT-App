@@ -45,7 +45,7 @@ class ProviderViewModel extends ChangeNotifier {
     if (imageTextController.text.isNotEmpty) {
       imageGenerationsList
           .add(ImageTextModel(type: 1, promptText: imageTextController.text));
-      final result = await imageGeneration(imageTextController.text);
+      final result = await imageGeneration(imageTextController.text,context);
       imageGenerationsList.add(ImageTextModel(type: 2, imageData: result.data));
       setIsShow();
       notifyListeners();
