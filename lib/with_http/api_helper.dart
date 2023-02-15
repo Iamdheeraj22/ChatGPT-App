@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:chat_gpt_app/model/chatGPT_response_model.dart';
+import 'package:chat_gpt_app/model/images_generation_model/image_generation_model.dart';
 import 'package:chat_gpt_app/util/strings.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,7 +29,7 @@ Future<ChatGPTModel> generateText(String prompt) async {
   }
 }
 
-Future<void> generateImages(String prompt) async {
+Future<ImagesGenerationsModel> imageGeneration(String prompt) async {
   final response = await http.post(
     Uri.parse(Strings.imageGenerationEndPoint),
     headers: {
@@ -40,7 +41,7 @@ Future<void> generateImages(String prompt) async {
 
   if (response.statusCode == 200) {
     log('response :-${response.body}');
-    //return ChatGPTModel.fromJson(jsonDecode(response.body));
+    return ImagesGenerationsModel.fromJson(jsonDecode(response.body));
   } else {
     log('response :-${response.body}');
     throw Exception("Failed to generate text");

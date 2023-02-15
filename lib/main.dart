@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:chat_gpt_app/model/images_generation_model/image_generation_model.dart';
 import 'package:chat_gpt_app/provider/provider.dart';
 import 'package:chat_gpt_app/util/size_config.dart';
+import 'package:chat_gpt_app/with_http/image_generations/image_generation_screen.dart';
 import 'package:chat_gpt_app/with_http/text_completions/chat_screen_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +38,17 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-          home: ChatScreenUI(),
+          home: Scaffold(
+              appBar: AppBar(
+                  centerTitle: true,
+                  title: const Text(
+                    'Chat GPT',
+                    style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.w700),
+                  )),
+              body: ImageGenerationsScreen()),
           builder: (context, child) {
             SizeConfig.initialize(
                 context: context,

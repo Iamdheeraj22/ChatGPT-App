@@ -26,15 +26,6 @@ class _ChatScreenUIState extends State<ChatScreenUI> {
     return Consumer<ProviderViewModel>(
       builder: (context, v, child) {
         return Scaffold(
-          appBar: AppBar(
-              centerTitle: true,
-              title: const Text(
-                'Chat GPT',
-                style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.blueAccent,
-                    fontWeight: FontWeight.w700),
-              )),
           body: SizedBox(
               height: double.infinity,
               width: double.infinity,
@@ -107,8 +98,7 @@ class _ChatScreenUIState extends State<ChatScreenUI> {
                             ),
                             InkWell(
                               onTap: () async {
-                                //  v.sendMessage(context);
-                                generateImages('');
+                                v.sendMessage(context);
                               },
                               child: const Card(
                                 child: Padding(
