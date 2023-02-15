@@ -9,14 +9,14 @@ class ImagesGenerationsModel {
     if (json['data'] != null) {
       data = <ImageData>[];
       json['data'].forEach((v) {
-        data!.add(new ImageData.fromJson(v));
+        data!.add(ImageData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['created'] = this.created;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['created'] = created;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -34,8 +34,8 @@ class ImageData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['url'] = this.url;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['url'] = url;
     return data;
   }
 }

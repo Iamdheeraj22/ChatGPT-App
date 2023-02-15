@@ -1,4 +1,4 @@
-import 'package:chat_gpt_app/size_config.dart';
+import 'package:chat_gpt_app/util/size_config.dart';
 import 'package:flutter/material.dart';
 
 class MessageUI extends StatelessWidget {

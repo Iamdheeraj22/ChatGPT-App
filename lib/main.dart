@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:chat_gpt_app/provider/provider.dart';
-import 'package:chat_gpt_app/size_config.dart';
-import 'package:chat_gpt_app/with_http/chat_screen_ui.dart';
+import 'package:chat_gpt_app/util/size_config.dart';
+import 'package:chat_gpt_app/with_http/text_completions/chat_screen_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

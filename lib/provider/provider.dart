@@ -1,6 +1,6 @@
 import 'package:chat_gpt_app/model/ChatModel.dart';
 import 'package:chat_gpt_app/model/chatGPT_response_model.dart';
-import 'package:chat_gpt_app/size_config.dart';
+import 'package:chat_gpt_app/util/size_config.dart';
 import 'package:chat_gpt_app/with_http/api_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
