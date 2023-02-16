@@ -21,12 +21,15 @@ class _ImageGenerationsScreenState extends State<ImageGenerationsScreen> {
           width: double.infinity,
           child: Stack(
             children: [
-              ListView.builder(
-                  itemCount: v.imageGenerationsList.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) => ImageGenerationWidget(
-                        model: v.imageGenerationsList[index],
-                      )),
+              Container(
+                margin: EdgeInsets.only(bottom: 55.h),
+                child: ListView.builder(
+                    itemCount: v.imageGenerationsList.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => ImageGenerationWidget(
+                          model: v.imageGenerationsList[index],
+                        )),
+              ),
               Container(
                 alignment: Alignment.bottomCenter,
                 child: Row(

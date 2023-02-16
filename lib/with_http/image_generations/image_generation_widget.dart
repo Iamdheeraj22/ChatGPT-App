@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_gpt_app/model/images_generation_model/ImageTextModel.dart';
 import 'package:chat_gpt_app/model/images_generation_model/image_generation_model.dart';
 import 'package:chat_gpt_app/util/size_config.dart';
+import 'package:chat_gpt_app/with_http/image_generations/full_image_screen.dart';
 import 'package:flutter/material.dart';
 
 class ImageGenerationWidget extends StatelessWidget {
@@ -91,27 +92,38 @@ class ImageItemWidget extends StatelessWidget {
             child: GridView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
                 itemCount: imageData.length,
                 itemBuilder: (gContext, gIndex) {
-                  return CachedNetworkImage(
-                    imageUrl: imageData[gIndex].url!,
-                    imageBuilder: (context, imageProvider) => Container(
-                      margin: EdgeInsets.only(right: 10.w),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.r),
-                        image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                            colorFilter: const ColorFilter.mode(
-                                Colors.red, BlendMode.colorBurn)),
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (builder) => FullImageScreen(
+                              imageUrl: imageData[gIndex].url!)));
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: imageData[gIndex].url!,
+                      imageBuilder: (context, imageProvider) => Container(
+                        margin: EdgeInsets.only(right: 10.w),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.r),
+                          image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.red, BlendMode.colorBurn)),
+                        ),
                       ),
+                      placeholder: (context, url) => Center(
+                          child: SizedBox(
+                              height: 50.h,
+                              width: 50.h,
+                              child: const CircularProgressIndicator())),
+                      errorWidget: (context, url, error) => Text(error),
                     ),
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Text(error),
                   );
                 }),
           )

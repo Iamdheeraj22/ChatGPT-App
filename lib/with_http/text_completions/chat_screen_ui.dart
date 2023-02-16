@@ -30,10 +30,10 @@ class _ChatScreenUIState extends State<ChatScreenUI> {
               height: double.infinity,
               width: double.infinity,
               child: Stack(children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: 100.h),
+                Container(
+                  margin: EdgeInsets.only(bottom: 60.h),
                   child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       padding: EdgeInsets.zero,
                       itemCount: v.chatList.length,
                       shrinkWrap: true,
